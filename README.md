@@ -5,7 +5,12 @@
 ## Chapter 2: Literature Review
 
 ## Chapter 3: Methodology
-
+<!-- figures\methodology\data_preparation.png -->
+<!-- figures\methodology\triplet_network_architecture.png -->
+<!-- figures\methodology\retriever_architecture.png -->
+<!-- figures\methodology\resnet_loss_curves.png -->
+<!-- figures\methodology\efficientnet_loss_curves.png -->
+<!-- figures\methodology\vgg_loss_curves.png -->
 ### 3.1 Dataset
 
 
