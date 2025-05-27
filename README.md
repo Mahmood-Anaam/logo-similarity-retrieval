@@ -37,10 +37,51 @@ The pipeline consists of the following major stages:
 </p>
 
 ### Inference-time Retrieval  
-<p align="center">
-  <img src="figures/retriever_architecture.png" alt="Retriever Architecture" width="700"/>
-</p>
+```mermaid
+---
+config:
+  theme: redux
+---
 
+flowchart TB
+    %%== Simplified Inference Architecture: TripletNet Retrieval ==%%
+
+
+    A@{shape: lean-r, label: "User Input:\nQuery Logo Image"}
+
+
+    B@{shape: subproc, label: "Trained TripletNet\n(CNN + Projection + Norm)"}
+    C@{shape: rect, label: "Query Embedding (Vector)"}
+
+    D@{shape: cyl, label: "Embeddings Database\n(Precomputed Vectors)"}
+    E@{shape: subproc, label: "FAISS Index"}
+
+    C --> F@{shape: diamond, label: "Find Top-K Nearest Neighbors"}
+    F --> G@{shape: rect, label: "Retrieve Matching Logos"}
+    G --> H@{shape: curv-trap, label: "Display Results to User\n(Grid or Ranked View)"}
+    H --> I@{shape: dbl-circ, label: "End of Inference"}
+
+
+    A --> B --> C
+    D --> E
+    C --> E
+    E --> F
+
+  
+    classDef inputStyle fill:#e1f5fe,stroke:#0288d1,stroke-width:1.5px;
+    classDef modelStyle fill:#ede7f6,stroke:#512da8,stroke-width:1.5px;
+    classDef embedStyle fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px;
+    classDef dbStyle fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef searchStyle fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px;
+    classDef displayStyle fill:#fff8e1,stroke:#f9a825,stroke-width:2px;
+
+    class A inputStyle;
+    class B modelStyle;
+    class C embedStyle;
+    class D,E dbStyle;
+    class F,G searchStyle;
+    class H,I displayStyle;
+```
 
 
 ## 📈 Training Stability
