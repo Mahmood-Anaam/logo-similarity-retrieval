@@ -23,6 +23,7 @@ The pipeline consists of the following major stages:
 5. **Inference and Retrieval:**  
    Embeddings from the trained model are queried against a FAISS index to retrieve similar logos.
 
+
 ## 🔧 Pipeline Architecture
 
 ### Data Preparation Pipeline  
@@ -31,89 +32,14 @@ The pipeline consists of the following major stages:
 </p>
 
 ### Triplet Network Architecture  
-```mermaid
----
-config:
-  theme: redux
----
-
-flowchart LR
-    %%== Architecture of the Proposed Triplet Network Model ==%%
-
-    A1@{shape: lean-r, label: "Anchor Image"}
-    A2@{shape: lean-r, label: "Positive Image"}
-    A3@{shape: lean-r, label: "Negative Image"}
-
-    E1@{shape: subproc, label: "Shared Encoder\n(CNN: ResNet50, VGG16 , ...)"}
-    P1@{shape: rect, label: "Projection Layer\n(Fully Connected)"}
-    N1@{shape: rect, label: "L2 Normalization"}
-
-    A1 --> E1 --> P1 --> N1 --> F1@{shape: rect, label: "Anchor Embedding"}
-    A2 --> E1 --> P1 --> N1 --> F2@{shape: rect, label: "Positive Embedding"}
-    A3 --> E1 --> P1 --> N1 --> F3@{shape: rect, label: "Negative Embedding"}
-
-    F1 --> L@{shape: diamond, label: "Triplet Loss\nComputation"}
-    F2 --> L
-    F3 --> L
-    L --> O@{shape: rect, label: "Backpropagation\nand Optimization"}
-
-    classDef inputStyle fill:#e1f5fe,stroke:#0288d1,stroke-width:1.5px;
-    classDef encoderStyle fill:#ede7f6,stroke:#512da8,stroke-width:1.5px;
-    classDef embedStyle fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px;
-    classDef lossStyle fill:#ffebee,stroke:#d32f2f,stroke-width:2px;
-
-    class A1,A2,A3 inputStyle;
-    class E1 encoderStyle;
-    class P1,N1,F1,F2,F3 embedStyle;
-    class L,O lossStyle;
-```
+<p align="center">
+  <img src="figures/triplet_network_architecture.png" alt="Triplet Network" width="700"/>
+</p>
 
 ### Inference-time Retrieval  
-```mermaid
----
-config:
-  theme: redux
----
-
-flowchart TB
-    %%== Simplified Inference Architecture: TripletNet Retrieval ==%%
-
-
-    A@{shape: lean-r, label: "User Input:\nQuery Logo Image"}
-
-
-    B@{shape: subproc, label: "Trained TripletNet\n(CNN + Projection + Norm)"}
-    C@{shape: rect, label: "Query Embedding (Vector)"}
-
-    D@{shape: cyl, label: "Embeddings Database\n(Precomputed Vectors)"}
-    E@{shape: subproc, label: "FAISS Index"}
-
-    C --> F@{shape: diamond, label: "Find Top-K Nearest Neighbors"}
-    F --> G@{shape: rect, label: "Retrieve Matching Logos"}
-    G --> H@{shape: curv-trap, label: "Display Results to User\n(Grid or Ranked View)"}
-    H --> I@{shape: dbl-circ, label: "End of Inference"}
-
-
-    A --> B --> C
-    D --> E
-    C --> E
-    E --> F
-
-  
-    classDef inputStyle fill:#e1f5fe,stroke:#0288d1,stroke-width:1.5px;
-    classDef modelStyle fill:#ede7f6,stroke:#512da8,stroke-width:1.5px;
-    classDef embedStyle fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px;
-    classDef dbStyle fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef searchStyle fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px;
-    classDef displayStyle fill:#fff8e1,stroke:#f9a825,stroke-width:2px;
-
-    class A inputStyle;
-    class B modelStyle;
-    class C embedStyle;
-    class D,E dbStyle;
-    class F,G searchStyle;
-    class H,I displayStyle;
-```
+<p align="center">
+  <img src="figures/retriever_architecture.png" alt="Retriever Architecture" width="700"/>
+</p>
 
 
 
@@ -135,8 +61,6 @@ Loss curves during training reveal convergence behavior for each backbone:
 <p align="center">
   <img src="figures/vgg_loss_curves.png" alt="VGG Loss Curve" width="600"/>
 </p>
-
-
 
 ## 📝 Summary
 
