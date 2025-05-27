@@ -31,9 +31,42 @@ The pipeline consists of the following major stages:
 </p>
 
 ### Triplet Network Architecture  
-<p align="center">
-  <img src="figures/triplet_network_architecture.png" alt="Triplet Network" width="700"/>
-</p>
+```mermaid
+---
+config:
+  theme: redux
+---
+
+flowchart LR
+    %%== Architecture of the Proposed Triplet Network Model ==%%
+
+    A1@{shape: lean-r, label: "Anchor Image"}
+    A2@{shape: lean-r, label: "Positive Image"}
+    A3@{shape: lean-r, label: "Negative Image"}
+
+    E1@{shape: subproc, label: "Shared Encoder\n(CNN: ResNet50, VGG16 , ...)"}
+    P1@{shape: rect, label: "Projection Layer\n(Fully Connected)"}
+    N1@{shape: rect, label: "L2 Normalization"}
+
+    A1 --> E1 --> P1 --> N1 --> F1@{shape: rect, label: "Anchor Embedding"}
+    A2 --> E1 --> P1 --> N1 --> F2@{shape: rect, label: "Positive Embedding"}
+    A3 --> E1 --> P1 --> N1 --> F3@{shape: rect, label: "Negative Embedding"}
+
+    F1 --> L@{shape: diamond, label: "Triplet Loss\nComputation"}
+    F2 --> L
+    F3 --> L
+    L --> O@{shape: rect, label: "Backpropagation\nand Optimization"}
+
+    classDef inputStyle fill:#e1f5fe,stroke:#0288d1,stroke-width:1.5px;
+    classDef encoderStyle fill:#ede7f6,stroke:#512da8,stroke-width:1.5px;
+    classDef embedStyle fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px;
+    classDef lossStyle fill:#ffebee,stroke:#d32f2f,stroke-width:2px;
+
+    class A1,A2,A3 inputStyle;
+    class E1 encoderStyle;
+    class P1,N1,F1,F2,F3 embedStyle;
+    class L,O lossStyle;
+```
 
 ### Inference-time Retrieval  
 ```mermaid
